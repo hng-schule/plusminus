@@ -69,6 +69,10 @@ h1,h2,h3{font-family:var(--display);font-weight:400;letter-spacing:.01em;text-wr
 .topbar{display:flex;align-items:center;gap:12px;padding-block:8px;min-height:56px}
 .topbar h2{font-size:22px;color:var(--brass);white-space:nowrap}
 .chip{background:#ffffff1a;border-radius:999px;padding:4px 12px;font-size:14px;white-space:nowrap}
+button.chip{border:0;color:inherit;font:inherit;font-size:15px;padding:8px 14px;min-height:40px;display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+button.chip svg{width:14px;height:14px}
+.lvlpick{display:flex;flex-direction:column;gap:10px}
+.lvlpick .btn{width:100%;justify-content:center}
 .spacer{flex:1}
 .iconbtn{background:#ffffff14;border:0;border-radius:12px;min-width:48px;height:48px;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:0 12px;font-size:15px}
 .iconbtn svg{width:24px;height:24px;flex:none}
@@ -196,7 +200,7 @@ h1,h2,h3{font-family:var(--display);font-weight:400;letter-spacing:.01em;text-wr
 .teacher{overflow:auto;display:block;padding-block:24px}
 .teacher .inner{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
 .teacher p{line-height:1.5;max-width:65ch;margin:0}
-.qrs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.qrs{display:grid;grid-template-columns:minmax(0,340px);gap:16px}
 .qrcard{background:var(--paper);color:var(--ink);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center;border-top:10px solid var(--c)}
 .qrcard .qr{width:100%;max-width:200px;aspect-ratio:1;background:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--ink-soft);padding:6px}
 .qrcard .qr img,.qrcard .qr svg{width:100%;height:100%}
@@ -330,7 +334,6 @@ button.cell.ok{border:2px solid var(--good);color:var(--good);background:#fff}
     </div>
     <div class="codebox"><label for="codein" style="font-size:16px">Raumcode:</label><input id="codein" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="z. B. HALLE-F-27"><button class="btn ghost" id="b-code" style="min-height:48px;font-size:18px;padding:8px 18px">Einsteigen</button></div>
     <p id="codefb" style="min-height:22px;margin:-12px 0 0;font-size:15px"></p>
-    <button class="linkish" id="b-teacher">Für Lehrkräfte: Stufen-Links und QR-Codes</button>
   </div>
 </section>
 
@@ -356,6 +359,7 @@ button.cell.ok{border:2px solid var(--good);color:var(--good);background:#fff}
       <button class="lvl" data-l="f"><span class="stars">★★</span><b>Forscher</b><span>Zahlen bis 1000. Für alle, die sich sicher fühlen.</span></button>
       <button class="lvl" data-l="p"><span class="stars">★★★</span><b>Profi</b><span>Mehrere Zahlen und knifflige Fragen.</span></button>
     </div>
+    <p style="font-size:17px;margin:0">Keine Sorge: Du kannst die Stufe später oben im Spiel jederzeit wechseln.</p>
   </div>
 </section>
 
@@ -363,7 +367,7 @@ button.cell.ok{border:2px solid var(--good);color:var(--good);background:#fff}
 <section class="screen" id="s-game" hidden>
   <div class="topbar">
     <h2 id="roomtitle">Raum 1: Eingangshalle</h2>
-    <span class="chip" id="lvlchip"></span>
+    <button class="chip" id="lvlchip" aria-label="Stufe wechseln"><span id="lvlname"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
     <span class="spacer"></span>
     <button class="iconbtn" id="b-help" aria-pressed="false" aria-label="Hilfe: zeigen, was man antippen kann"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 015 0c0 1.8-2.5 2-2.5 4"/><circle cx="12" cy="17" r=".8" fill="currentColor"/></svg><span class="lbl">Hilfe</span></button>
     <button class="iconbtn" id="b-notes" aria-label="Notizblock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg><span class="lbl">Notizen</span></button>
@@ -704,7 +708,8 @@ button.cell.ok{border:2px solid var(--good);color:var(--good);background:#fff}
 <section class="screen teacher" id="s-teacher" hidden>
   <div class="inner">
     <h2 style="font-size:34px;color:var(--brass)">Klassenmodus</h2>
-    <p>Teilen Sie die Klasse in drei Gruppen. Jede Gruppe scannt den QR-Code ihrer Stufe mit der iPad-Kamera. Über diese Links ist die Stufe fest eingestellt: Die Kinder sehen keine Stufenwahl, und Rechno bietet keinen Wechsel an. Alle spielen dieselbe Geschichte mit anderen Zahlen.</p>
+    <p>Alle Kinder scannen denselben QR-Code mit der iPad-Kamera. Zu Beginn wählt jedes Kind seine Stufe: Entdecker (Zahlen bis 100), Forscher (Zahlen bis 1000) oder Profi (mehrere Zahlen, knifflige Fragen). Über den Knopf „Stufe“ oben im Spiel kann es jederzeit wechseln. Der aktuelle Raum beginnt dann von vorn mit neuen Zahlen, gesammelte Kartenteile bleiben erhalten. Alle spielen dieselbe Geschichte mit anderen Zahlen.</p>
+    <p>Diese Seite ist nur über den Lehrer-Link erreichbar. Bitte geben Sie ihn nicht an die Kinder weiter.</p>
     <div class="field">
       <label for="baseurl">Adresse des Spiels (wird nach der Veröffentlichung eingetragen)</label>
       <input id="baseurl" type="url" inputmode="url" autocomplete="off">
@@ -3160,7 +3165,7 @@ function hintFor(t, lvl) {
 }
 
 /* ---------- Spielstand ---------- */
-let S = null; let locked = null;
+let S = null;
 function fresh(level) {
   return { level, round: makeRound(level), coatSolved: false, porSolved: false, books: [false, false, false], booksSorted: false,
     seen: {}, inv: [], notes: [], wrong: 0, hint: {}, sel: null, doorOpen: false, started: Date.now(), pieceTaken: false, pieceSolved: false,
@@ -4870,7 +4875,7 @@ const ROOMS = { 2: ROOM2, 3: ROOM3, 4: ROOM4, 5: ROOM5 };
 function showRoom() {
   $$('.room').forEach(el => el.hidden = el.id !== 'room' + S.room);
   $('#roomtitle').textContent = S.room === 5 ? 'Finale: Zeitkapsel' : `Raum ${S.room}: ${ROOMNAMES[S.room]}`;
-  $('#lvlchip').textContent = 'Stufe: ' + LEVELS[S.level].name + (locked ? ' (fest)' : '');
+  $('#lvlname').textContent = 'Stufe: ' + LEVELS[S.level].name;
   show('s-game'); updateScene();
 }
 function enterRoom(n) {
@@ -4888,8 +4893,16 @@ function restartRoom(n) {
   if (S.codes) delete S.codes[n];
   enterRoom(n);
 }
+function levelCard() {
+  if (!S) return; beep('click');
+  const cur = S.level;
+  openCard(`<h3>Stufe wechseln</h3><div data-say style="display:flex;flex-direction:column;gap:10px"><p>Du spielst gerade als <b>${LEVELS[cur].name}</b>.</p><p>Wenn du die Stufe wechselst, beginnt dieser Raum von vorn mit neuen Zahlen. Deine Kartenteile behältst du.</p></div><button class="say">${sayIcon} Vorlesen</button><div class="lvlpick">${LORDER.map(l => `<button class="btn${l === cur ? '' : ' ghost'}" data-pick="${l}"${l === cur ? ' disabled' : ''}>${LEVELS[l].name}${l === cur ? ' (jetzt)' : ''}</button>`).join('')}</div><div class="row"><button class="btn ghost" id="b-close">Abbrechen</button></div>`);
+  $('#b-close').onclick = closeCard;
+  $$('#card [data-pick]').forEach(b => b.onclick = () => { closeCard(); S.level = b.dataset.pick; save(); restartRoom(S.room); });
+}
+$('#lvlchip').onclick = levelCard;
 function startFromCode(c) {
-  S = fresh(locked || c.level); S.pieceTaken = true; S.pieceSolved = true; S.coatSolved = true; S.porSolved = true;
+  S = fresh(c.level); S.pieceTaken = true; S.pieceSolved = true; S.coatSolved = true; S.porSolved = true;
   for (let i = 1; i <= c.room; i++) S.inv.push('teil' + i);
   enterRoom(c.room + 1);
 }
@@ -4941,7 +4954,7 @@ function finish() {
   $('#donetime').textContent = `Stufe ${L.name}, Spielzeit für diesen Raum etwa ${min} ${min === 1 ? 'Minute' : 'Minuten'}.`;
   const i = LORDER.indexOf(S.level);
   let adapt = '', btns = `<button class="btn" id="b-nextroom">${n === 4 ? 'Weiter zum Finale' : `Weiter: Raum ${n + 1}`}</button><button class="btn ghost" id="b-again">Raum nochmal mit neuen Zahlen</button>`;
-  if (!locked) {
+  {
     if (S.wrong <= 1 && i < 2) { adapt = 'Das ging ja flott! Willst du es im nächsten Raum schwieriger probieren?'; btns += `<button class="btn ghost" data-go="${LORDER[i + 1]}">Weiter als ${LEVELS[LORDER[i + 1]].name}</button>`; }
     else if (S.wrong >= 6 && i > 0) { adapt = 'Das war knifflig. Mit einer leichteren Stufe kannst du in Ruhe üben.'; btns += `<button class="btn ghost" data-go="${LORDER[i - 1]}">Weiter als ${LEVELS[LORDER[i - 1]].name}</button>`; }
   }
@@ -4993,9 +5006,9 @@ function intro(then) { afterIntro = then; panel = 0; renderPanel(); show('s-intr
 $('#b-next').onclick = () => { beep('click'); if (panel < PANELS.length - 1) { panel++; renderPanel(); if (panel === 1) slam(); } else afterIntro(); };
 $('#b-skip').onclick = () => { stopVoice(); afterIntro(); };
 $$('.lvl').forEach(b => b.onclick = () => startLevel(b.dataset.l));
-function savedGame() { const old = load(); return old && old.round && old.machine && !old.finished && (!locked || old.level === locked) ? old : null; }
+function savedGame() { const old = load(); return old && old.round && old.machine && !old.finished ? old : null; }
 function showStart() { $('#b-resume').hidden = !savedGame(); show('s-start'); }
-$('#b-start').onclick = () => intro(() => locked ? startLevel(locked) : show('s-level'));
+$('#b-start').onclick = () => intro(() => show('s-level'));
 $('#b-resume').onclick = () => { const old = savedGame(); if (!old) return showStart(); S = old; S.sel = null; resume(); };
 $('#b-code').onclick = () => {
   const c = parseCode($('#codein').value);
@@ -5011,24 +5024,21 @@ function teacher() {
   if (!inp.value) { let u = ''; try { if (window.self === window.top) u = location.href.split('#')[0]; } catch (e) {} inp.value = /^https?:/.test(u) ? u : ''; }
   const render = () => {
     const base = inp.value.trim();
-    $('#qrs').innerHTML = Object.values(LEVELS).map(L => {
-      const url = base ? base + '#' + L.hash : '';
+    $('#qrs').innerHTML = [{ name: 'Spiel für alle', color: '#e0a93b' }].map(L => {
+      const url = base;
       let qr = 'Erst die Adresse eintragen';
       if (url && window.qrcode) { try { const q = qrcode(0, 'M'); q.addData(url); q.make(); qr = q.createSvgTag({ cellSize: 4, margin: 2, scalable: true }); } catch (e) {} }
-      return `<div class="qrcard" style="--c:${L.color}"><h3 style="font-size:24px">Gruppe ${L.name}</h3><div class="qr">${qr}</div><code>${url || '…#' + L.hash}</code></div>`;
+      return `<div class="qrcard" style="--c:${L.color}"><h3 style="font-size:24px">${L.name}</h3><div class="qr">${qr}</div><code>${url || '…'}</code></div>`;
     }).join('');
   };
   inp.oninput = render; render();
   $('#codetab').innerHTML = '<tr><th>Geschafft</th>' + LORDER.map(l => `<th>${LEVELS[l].name}</th>`).join('') + '</tr>' + [1, 2, 3, 4].map(n => `<tr><td>Raum ${n}: ${ROOMNAMES[n]}</td>${LORDER.map(l => `<td>${teacherCode(n, l)}</td>`).join('')}</tr>`).join('');
 }
-$('#b-teacher').onclick = teacher;
 $('#b-tback').onclick = showStart;
 
 /* ---------- Einstieg über Link ---------- */
 const h = (location.hash || '').slice(1).toLowerCase();
-const byHash = Object.entries(LEVELS).find(([, L]) => L.hash === h);
-if (byHash) locked = byHash[0];
-if (h === 'lehrer') teacher(); else showStart();
+if (h === 'lk-sfnmoz8hfd') teacher(); else showStart();
 if (/test/.test(location.search)) window.__pm = { get S() { return S; }, enterRoom, startFromCode, tafelPlan, voiceSegs, updateScene };
 })();
 </script>
