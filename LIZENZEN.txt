@@ -1,0 +1,12 @@
+Das Labor von Professor Plusminus
+Lernspiel für Mathematik Klasse 5 (Addieren und Subtrahieren)
+Idee und Bilder: Christoph. Programmierung mit Unterstützung von Claude.
+
+Eingebettete fremde Bestandteile (alle in index.html enthalten, nichts wird aus dem Internet nachgeladen):
+
+- Schrift "Andika" (SIL International), SIL Open Font License 1.1, https://openfontlicense.org
+- Schrift "Lilita One" (Juan Montoreano), SIL Open Font License 1.1, https://openfontlicense.org
+- qrcode-generator 1.4.4 (Kazuhiko Arase), MIT-Lizenz
+
+Datenschutz: Das Spiel braucht keine Anmeldung und sendet keine Daten. Spielstand und Stimmen-Einstellung
+liegen nur im Browser des jeweiligen Geräts (localStorage). Namen auf der Urkunde werden nicht gespeichert.
