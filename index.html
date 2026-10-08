@@ -450,7 +450,7 @@ button.cell.ok{border:2px solid var(--good);color:var(--good);background:#fff}
         <g id="lasers" pointer-events="none">
           <g fill="#3d474b"><rect x="1244" y="251" width="10" height="393" rx="3"/><rect x="1592" y="251" width="10" height="393" rx="3"/></g>
           <g stroke="#ff3b3b" stroke-width="5" stroke-linecap="round" style="filter:drop-shadow(0 0 6px #ff3b3b)">
-            <path id="laser0" d="M1250 298L1596 322"/><path id="laser1" d="M1250 421L1596 396"/><path id="laser2" d="M1250 472L1596 495"/><path id="laser3" d="M1250 582L1596 566"/>
+            <path id="laser0" d="M1250 290L1596 312"/><path id="laser1" d="M1250 368L1596 350"/><path id="laser2" d="M1250 440L1596 460"/><path id="laser3" d="M1250 516L1596 500"/><path id="laser4" d="M1250 592L1596 574"/>
           </g>
         </g>
       </svg>
@@ -520,7 +520,7 @@ button.cell.ok{border:2px solid var(--good);color:var(--good);background:#fff}
         <image data-bg3 x="0" y="0" width="1600" height="900" preserveAspectRatio="none"/>
         <g id="stars3" clip-path="url(#cWin3)" pointer-events="none"></g>
         <g pointer-events="none">
-          <text x="409.3" y="187.5" text-anchor="middle" font-family="Lilita One, sans-serif" font-size="40" fill="#5a3a1a" opacity=".85">★</text>
+          <text x="138" y="200" text-anchor="middle" font-family="Lilita One, sans-serif" font-size="40" fill="#5a3a1a" opacity=".85" transform="rotate(-4 138 200)">★</text>
           <text x="383.7" y="585.9" text-anchor="middle" font-family="Lilita One, sans-serif" font-size="26" fill="#3a2a1a" opacity=".8" transform="rotate(-8 383.7 585.9)">☾</text>
           <g fill="none" stroke="#e8efe9" stroke-width="3" stroke-linecap="round" opacity=".55"><path d="M976.7 404.3h70M976.7 445.3h70M965.1 462.9h85M976.7 498.0h70"/><path d="M1075.6 404.3h50M1075.6 445.3h50M1067.4 462.9h62M1075.6 498.0h50"/></g>
           <text x="936.0" y="412.5" text-anchor="middle" font-family="Lilita One, sans-serif" font-size="40" fill="#f1f4ee" opacity=".8">☀</text>
@@ -3620,8 +3620,8 @@ function openAlarm() {
   }
   if (!alarmT) alarmT = alarmItem(S.level);
   const t = alarmT;
-  openCard(`<h3>Alarmanlage ausschalten</h3><p data-say>Auf dem Bildschirm erscheinen Rechnungen. Entscheide schnell mit einem Überschlag: Kann das Ergebnis stimmen? Für jede richtige Antwort geht ein Laser aus. Runde auf ${UNITNAME[S.level]}.</p><button class="say">${sayIcon} Vorlesen</button>
-    <div class="lasers">${[0, 1, 2, 3].map(i => `<i class="${i < S.alarmOk ? 'off' : ''}"></i>`).join('')}</div>
+  openCard(`<h3>Alarmanlage ausschalten</h3><p data-say>Auf dem Bildschirm erscheinen Rechnungen. Entscheide schnell mit einem Überschlag: Kann das Ergebnis stimmen? Für jede richtige Antwort geht ein Laser aus. Bei einer falschen Antwort geht wieder einer an. Runde auf ${UNITNAME[S.level]}.</p><button class="say">${sayIcon} Vorlesen</button>
+    <div class="lasers">${[0, 1, 2, 3, 4].map(i => `<i class="${i < S.alarmOk ? 'off' : ''}"></i>`).join('')}</div>
     <div class="task">${fmt(t.a)} ${t.op} ${fmt(t.b)} = ${fmt(t.shown)}</div>
     <div class="choice"><button class="btn yes" id="b-yes">Kann stimmen</button><button class="btn no" id="b-no">Kann nicht stimmen</button></div>
     <div class="fb" id="fb"></div><div class="paper-note" id="hintbox" hidden></div>
@@ -3631,14 +3631,15 @@ function openAlarm() {
     const o = overschlag(t), expl = `Bei ${fmt(t.a)} ${t.op} ${fmt(t.b)} = ${fmt(t.shown)} ist der Überschlag ${fmt(o.ra)} ${t.op} ${fmt(o.rb)} = ${fmt(o.res)}. ${t.plausible ? `${fmt(t.shown)} liegt nah dran.` : `${fmt(t.shown)} ist viel zu weit weg.`}`;
     if (yes === t.plausible) {
       S.alarmOk++; beep('good'); alarmT = null; S.hint.alarm = { wrong: 0, lvl: 0 };
-      if (S.alarmOk >= 4) {
+      if (S.alarmOk >= 5) {
         S.alarmOff = true; note('Alarmanlage mit Überschlägen ausgeschaltet.'); save(); updateScene(); closeCard();
         bubble('Alle Laser sind aus! Jetzt kommst du an das Bücherregal.'); return;
       }
       save(); updateScene(); openAlarm(); $('#fb').className = 'fb good'; $('#fb').textContent = 'Richtig! ' + expl;
     } else {
-      S.wrong++; const w = (S.hint.alarm = S.hint.alarm || { wrong: 0, lvl: 0 }); w.wrong++; beep('bad'); alarmT = null; save();
-      openAlarm(); $('#fb').className = 'fb bad'; $('#fb').textContent = 'Piep! Der Laser bleibt an. ' + expl + ' Hier kommt die nächste Rechnung.';
+      S.wrong++; const w = (S.hint.alarm = S.hint.alarm || { wrong: 0, lvl: 0 }); w.wrong++; beep('bad'); alarmT = null;
+      const back = S.alarmOk > 0; if (back) S.alarmOk--; save(); updateScene();
+      openAlarm(); $('#fb').className = 'fb bad'; $('#fb').textContent = (back ? 'Piep! Ein Laser geht wieder an. ' : 'Piep! Alle Laser bleiben an. ') + expl + ' Hier kommt die nächste Rechnung.';
     }
   };
   $('#b-yes').onclick = () => answer(true);
@@ -3769,7 +3770,7 @@ function updateScene() {
   $('#compartmentDoor').classList.toggle('open', comp);
   const p = $('#piece'); p.setAttribute('opacity', comp && !S.pieceTaken ? 1 : 0); p.style.pointerEvents = comp && !S.pieceTaken ? 'auto' : 'none';
   setLed('#lockled', S.doorOpen);
-  [0, 1, 2, 3].forEach(i => $('#laser' + i).style.opacity = (S.alarmOff || i < S.alarmOk) ? 0 : 1);
+  [0, 1, 2, 3, 4].forEach(i => $('#laser' + i).style.opacity = (S.alarmOff || i < S.alarmOk) ? 0 : 1);
   $('#lasers').style.opacity = S.alarmOff ? 0 : 1;
   $('#alarmled').setAttribute('fill', S.alarmOff ? '#2f8a4e' : '#ff3b3b');
   $('#dooropen').style.opacity = S.doorOpen ? 1 : 0;
@@ -4922,7 +4923,7 @@ function finale() {
   $('#donetitle').textContent = 'Professor Plusminus ist frei!';
   $('#donetext').textContent = '„Endlich! Ich hatte mich aus Versehen in meiner eigenen Zeitkapsel eingeschlossen“, lacht der Professor und putzt seine Brille. „Du hast alle Rätsel in meinem Labor gelöst. Du bist ein echtes Rechengenie!“';
   $('#urkunde').hidden = false;
-  $('#urkunde').innerHTML = `<div class="urkunde"><h3>Urkunde</h3><input id="uname" maxlength="30" autocomplete="off" placeholder="Dein Name" aria-label="Dein Name"><p>hat das Labor von Professor Plusminus auf der Stufe <b>${L.name}</b> geschafft.</p><p style="font-size:16px;color:var(--ink-soft)">${new Date().toLocaleDateString('de-DE')} · Gesamtzeit etwa ${min} ${min === 1 ? 'Minute' : 'Minuten'}</p><p style="font-size:15px;color:var(--ink-soft)">Der Name wird nicht gespeichert. Zeig die Urkunde deiner Lehrkraft.</p></div>`;
+  $('#urkunde').innerHTML = `<div class="urkunde"><h3>Urkunde</h3><input id="uname" maxlength="30" autocomplete="off" placeholder="Dein Name" aria-label="Dein Name"><p>hat das Labor von Professor Plusminus auf der Stufe <b>${L.name}</b> geschafft.</p><p style="font-size:16px;color:var(--ink-soft)">${new Date().toLocaleDateString('de-DE')} · Gesamtzeit etwa ${min} ${min === 1 ? 'Minute' : 'Minuten'}</p><p style="font-size:15px;color:var(--ink-soft)">Der Name wird nicht gespeichert. Trag den Code <b>NZAUS</b> auf dem Lernplan ein oder zeige ihn deiner Lehrkraft.</p></div>`;
   $('#learnedhead').textContent = 'Das kannst du jetzt:';
   $('#donelearned').innerHTML = ['Kopfrechnen, Überschlag und Probe', 'Rechengesetze und die Klammerregel', 'schriftlich addieren', 'schriftlich subtrahieren im Ergänzungsverfahren', 'Zauberquadrate lösen'].map(x => `<li>${x}</li>`).join('');
   $('#codewrap').style.display = 'none'; $('#donetime').textContent = ''; $('#adapt').hidden = true;
