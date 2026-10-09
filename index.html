@@ -68,6 +68,8 @@ h1,h2,h3{font-family:var(--display);font-weight:400;letter-spacing:.01em;text-wr
 /* ---------- Spiel ---------- */
 .topbar{display:flex;align-items:center;gap:12px;padding-block:8px;min-height:56px}
 .topbar h2{font-size:22px;color:var(--brass);white-space:nowrap}
+.voicetip{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);z-index:60;width:min(560px,calc(100% - 32px));background:var(--paper);color:var(--ink);border-radius:14px;padding:14px 18px;font-size:16px;line-height:1.45;box-shadow:0 8px 24px #0006}
+.voicetip b{font-weight:700}
 .chip{background:#ffffff1a;border-radius:999px;padding:4px 12px;font-size:14px;white-space:nowrap}
 button.chip{border:0;color:inherit;font:inherit;font-size:15px;padding:8px 14px;min-height:40px;display:inline-flex;align-items:center;gap:6px;cursor:pointer}
 button.chip svg{width:14px;height:14px}
@@ -724,6 +726,7 @@ button.cell.ok{border:2px solid var(--good);color:var(--good);background:#fff}
 
 <!-- Dialog -->
 <div class="overlay" id="overlay" hidden><div class="card" id="card" role="dialog" aria-modal="true"></div></div>
+<div class="voicetip" id="voicetip" role="status" hidden></div>
 <div class="rotate" id="rotate">Halte das iPad quer, dann siehst du den ganzen Raum.</div>
 
 <script>/* qrcode-generator 1.4.4, Kazuhiko Arase, MIT-Lizenz */
@@ -3359,7 +3362,14 @@ function setSprecher(m) {
   sprecher = m; try { localStorage.setItem('plusminus-sprecher', m); } catch (e) {}
   $$('[data-sprecher] .lbl').forEach(l => l.textContent = m === 'm' ? 'Sprecher' : 'Sprecherin');
 }
-$$('[data-sprecher]').forEach(b => b.onclick = () => { beep('click'); setSprecher(sprecher === 'm' ? 'f' : 'm'); speak(sprecher === 'm' ? 'Ich bin jetzt dein Sprecher.' : 'Ich bin jetzt deine Sprecherin.'); });
+let tipTimer = null;
+function voiceTip() {
+  const t = $('#voicetip');
+  t.innerHTML = 'Auf diesem iPad ist noch keine deutsche Männerstimme installiert. So installieren Sie eine:<br><b>Einstellungen › Bedienungshilfen › Gesprochene Inhalte › Stimmen › Deutsch</b>, dann zum Beispiel <b>Martin</b> oder <b>Markus</b> laden.';
+  t.hidden = false; clearTimeout(tipTimer); tipTimer = setTimeout(() => t.hidden = true, 12000);
+}
+$('#voicetip').onclick = () => { $('#voicetip').hidden = true; };
+$$('[data-sprecher]').forEach(b => b.onclick = () => { beep('click'); setSprecher(sprecher === 'm' ? 'f' : 'm'); if (TTS && !maleVoice) pickVoice(); if (sprecher === 'm' && !maleVoice) voiceTip(); else $('#voicetip').hidden = true; speak(sprecher === 'm' ? 'Ich bin jetzt dein Sprecher.' : 'Ich bin jetzt deine Sprecherin.'); });
 setSprecher(sprecher);
 
 /* ---------- Bildschirme ---------- */
