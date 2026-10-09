@@ -330,7 +330,6 @@ button.cell.ok{border:2px solid var(--good);color:var(--good);background:#fff}
     <h1 class="logo"><small>Ein Rechen-Abenteuer</small>Das Labor von<br>Professor Plusminus</h1>
     <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center">
       <button class="btn" id="b-start">Neues Abenteuer</button>
-      <button class="btn ghost" id="b-resume" hidden>Weiterspielen</button>
     </div>
     <div class="codebox"><label for="codein" style="font-size:16px">Raumcode:</label><input id="codein" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="z. B. HALLE-F-27"><button class="btn ghost" id="b-code" style="min-height:48px;font-size:18px;padding:8px 18px">Einsteigen</button></div>
     <p id="codefb" style="min-height:22px;margin:-12px 0 0;font-size:15px"></p>
@@ -343,7 +342,7 @@ button.cell.ok{border:2px solid var(--good);color:var(--good);background:#fff}
     <div class="comic" id="comic"></div>
     <div class="dots" id="dots"></div>
     <div class="row" style="display:flex;gap:12px">
-      <button class="iconbtn" style="height:auto;min-height:56px" data-voice aria-pressed="true" aria-label="Erzählstimme an oder aus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a3 3 0 00-3 3v6a3 3 0 006 0V6a3 3 0 00-3-3z"/><path d="M5 11a7 7 0 0014 0M12 18v3"/><path class="voff" d="M3 3l18 18"/></svg><span class="lbl">Stimme</span></button>
+      <button class="iconbtn" style="height:auto;min-height:56px" data-voice aria-pressed="true" aria-label="Erzählstimme an oder aus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a3 3 0 00-3 3v6a3 3 0 006 0V6a3 3 0 00-3-3z"/><path d="M5 11a7 7 0 0014 0M12 18v3"/><path class="voff" d="M3 3l18 18"/></svg><span class="lbl">Stimme</span></button><button class="iconbtn" style="height:auto;min-height:56px" data-sprecher aria-label="Sprecherin oder Sprecher wählen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg><span class="lbl">Sprecherin</span></button>
       <button class="btn ghost" id="b-introsay">Vorlesen</button><button class="btn ghost" id="b-skip">Überspringen</button>
       <button class="btn" id="b-next">Weiter</button>
     </div>
@@ -372,7 +371,7 @@ button.cell.ok{border:2px solid var(--good);color:var(--good);background:#fff}
     <button class="iconbtn" id="b-help" aria-pressed="false" aria-label="Hilfe: zeigen, was man antippen kann"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 015 0c0 1.8-2.5 2-2.5 4"/><circle cx="12" cy="17" r=".8" fill="currentColor"/></svg><span class="lbl">Hilfe</span></button>
     <button class="iconbtn" id="b-notes" aria-label="Notizblock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg><span class="lbl">Notizen</span></button>
     <button class="iconbtn" id="b-scratch" aria-label="Schmierzettel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></svg><span class="lbl">Schmierzettel</span></button>
-    <button class="iconbtn" data-voice aria-pressed="true" aria-label="Erzählstimme an oder aus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a3 3 0 00-3 3v6a3 3 0 006 0V6a3 3 0 00-3-3z"/><path d="M5 11a7 7 0 0014 0M12 18v3"/><path class="voff" d="M3 3l18 18"/></svg><span class="lbl">Stimme</span></button>
+    <button class="iconbtn" data-voice aria-pressed="true" aria-label="Erzählstimme an oder aus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a3 3 0 00-3 3v6a3 3 0 006 0V6a3 3 0 00-3-3z"/><path d="M5 11a7 7 0 0014 0M12 18v3"/><path class="voff" d="M3 3l18 18"/></svg><span class="lbl">Stimme</span></button><button class="iconbtn" data-sprecher aria-label="Sprecherin oder Sprecher wählen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg><span class="lbl">Sprecherin</span></button>
     <button class="iconbtn" id="b-sound" aria-label="Ton an oder aus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9v6h4l5 4V5L8 9z"/><path id="snd-wave" d="M16 9a4 4 0 010 6M18.5 6.5a8 8 0 010 11"/></svg></button>
   </div>
   <div class="stagewrap">
@@ -3264,12 +3263,17 @@ const sayIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
 // iPad/Safari: Die erste Ausgabe muss in einer Berührung starten, und direkt nach cancel() verschluckt Safari speak().
 const TTS = window.speechSynthesis || null;
 let voiceOn = true; try { voiceOn = localStorage.getItem('plusminus-voice') !== 'aus'; } catch (e) {}
+let sprecher = 'f'; try { if (localStorage.getItem('plusminus-sprecher') === 'm') sprecher = 'm'; } catch (e) {}
+let maleVoice = null;
 let deVoice = null, ttsUnlocked = false, ttsBusy = false, lastCancel = 0, sayTimer = null, sayGen = 0;
 function pickVoice() {
   if (!TTS) return;
   const score = v => (/premium|enhanced|erweitert|neural|natural/i.test(v.name) ? 8 : 0) + (/anna|helena|petra|markus|yannick|martin|google/i.test(v.name) ? 3 : 0) + (/de[-_]DE/i.test(v.lang) ? 2 : 0) + (v.localService ? 1 : 0);
   const vs = TTS.getVoices().filter(v => /^de([-_]|$)/i.test(v.lang)).sort((a, b) => score(b) - score(a));
-  deVoice = vs[0] || null;
+  // Männliche Stimmen am Namen erkennen (iPad: Martin, Markus, Yannick; Windows: Conrad, Stefan, Killian, Florian)
+  const MALE = /markus|yannick|martin|viktor|stefan|conrad|killian|florian|jonas|hans|klaus|eddy|reed|rocko|grandpa/i, FUN = /eddy|reed|rocko|grandpa/i;
+  deVoice = vs.find(v => !MALE.test(v.name)) || vs[0] || null;
+  maleVoice = vs.filter(v => MALE.test(v.name)).sort((a, b) => (FUN.test(a.name) ? 1 : 0) - (FUN.test(b.name) ? 1 : 0))[0] || null;
 }
 if (TTS) { pickVoice(); try { TTS.addEventListener('voiceschanged', pickVoice); } catch (e) { TTS.onvoiceschanged = pickVoice; } }
 function unlockTTS() {
@@ -3333,7 +3337,7 @@ function speak(text, who) {
       ttsBusy = true;
       segs.forEach((sg, k) => {
         const u = new SpeechSynthesisUtterance(sg.text);
-        u.lang = 'de-DE'; if (deVoice) u.voice = deVoice; u.pitch = sg.p; u.rate = sg.r;
+        u.lang = 'de-DE'; const mv = sprecher === 'm' ? maleVoice : null, vc = mv || deVoice; if (vc) u.voice = vc; u.pitch = Math.min(2, sg.p * (sprecher === 'm' && !mv ? .7 : 1)); u.rate = sg.r;
         if (k === segs.length - 1) u.onend = u.onerror = () => { if (gen === sayGen) ttsBusy = false; };
         TTS.speak(u);
       });
@@ -3351,6 +3355,12 @@ function setVoice(on) {
 }
 $$('[data-voice]').forEach(b => b.onclick = () => { beep('click'); setVoice(!voiceOn); if (voiceOn) speak('Die Erzählstimme ist an.', 'rechno'); });
 setVoice(voiceOn);
+function setSprecher(m) {
+  sprecher = m; try { localStorage.setItem('plusminus-sprecher', m); } catch (e) {}
+  $$('[data-sprecher] .lbl').forEach(l => l.textContent = m === 'm' ? 'Sprecher' : 'Sprecherin');
+}
+$$('[data-sprecher]').forEach(b => b.onclick = () => { beep('click'); setSprecher(sprecher === 'm' ? 'f' : 'm'); speak(sprecher === 'm' ? 'Ich bin jetzt dein Sprecher.' : 'Ich bin jetzt deine Sprecherin.'); });
+setSprecher(sprecher);
 
 /* ---------- Bildschirme ---------- */
 function show(id) { stopVoice(); $$('.screen').forEach(s => s.hidden = s.id !== id); $('#rotate').classList.toggle('show', id === 's-game'); }
@@ -5007,10 +5017,8 @@ function intro(then) { afterIntro = then; panel = 0; renderPanel(); show('s-intr
 $('#b-next').onclick = () => { beep('click'); if (panel < PANELS.length - 1) { panel++; renderPanel(); if (panel === 1) slam(); } else afterIntro(); };
 $('#b-skip').onclick = () => { stopVoice(); afterIntro(); };
 $$('.lvl').forEach(b => b.onclick = () => startLevel(b.dataset.l));
-function savedGame() { const old = load(); return old && old.round && old.machine && !old.finished ? old : null; }
-function showStart() { $('#b-resume').hidden = !savedGame(); show('s-start'); }
+function showStart() { show('s-start'); }
 $('#b-start').onclick = () => intro(() => show('s-level'));
-$('#b-resume').onclick = () => { const old = savedGame(); if (!old) return showStart(); S = old; S.sel = null; resume(); };
 $('#b-code').onclick = () => {
   const c = parseCode($('#codein').value);
   if (!c) { $('#codefb').textContent = 'Diesen Code kenne ich nicht. Prüfe die Schreibweise, zum Beispiel HALLE-F-27.'; beep('bad'); return; }
